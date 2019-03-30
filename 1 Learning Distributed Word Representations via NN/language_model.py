@@ -18,9 +18,7 @@ DEFAULT_TRAINING_CONFIG = {'batch_size': 100,                    # the size of a
                            }
 
 def get_batches(inputs, targets, batch_size, shuffle=True):
-    """Divide a dataset (usually the training set) into mini-batches of a given size. This is a
-    'generator', i.e. something you can use in a for loop. You don't need to understand how it
-    works to do the assignment."""
+    """Divide a dataset (usually the training set) into mini-batches of a given size."""
     
     if inputs.shape[0] % batch_size != 0:
         raise RuntimeError('The number of data points must be a multiple of the batch size.')
@@ -79,10 +77,6 @@ class Params(object):
         output_bias = np.zeros(vocab_size)
         return cls(word_embedding_weights, embed_to_hid_weights, hid_to_output_weights,
                    hid_bias, output_bias)
-
-
-    ###### The functions below are Python's somewhat oddball way of overloading operators, so that
-    ###### we can do arithmetic on Params instances
 
     def __mul__(self, a):
         return self.__class__(a * self.word_embedding_weights,
@@ -173,10 +167,7 @@ class Model(object):
             expanded_target_batch - each row is the indicator vector for a target word,
                 i.e. the (i, j) entry is 1 if the i'th word is j, and 0 otherwise."""
         
-        ###########################   YOUR CODE HERE  ##############################
         return output_activations - expanded_target_batch
-        ############################################################################
-
 
     def compute_loss(self, output_activations, expanded_target_batch):
         """Compute the total loss over a mini-batch. expanded_target_batch is the matrix obtained
@@ -184,9 +175,7 @@ class Model(object):
         return -np.sum(expanded_target_batch * np.log(output_activations + TINY))
 
     def compute_activations(self, inputs):
-        """Compute the activations on a batch given the inputs. Returns an Activations instance.
-        You should try to read and understand this function, since this will give you clues for
-        how to implement back_propagate."""
+        """Compute the activations on a batch given the inputs. Returns an Activations instance."""
         
         batch_size = inputs.shape[0]
         if inputs.shape[1] != self.context_len:
@@ -230,11 +219,7 @@ class Model(object):
              input_batch - the indices of the context words
              activations - an Activations class representing the output of Model.compute_activations
              loss_derivative - the matrix of derivatives computed by compute_loss_derivative
-             
-        Part of this function is already completed, but you need to fill in the derivative
-        computations for hid_to_output_weights_grad, output_bias_grad, embed_to_hid_weights_grad,
-        and hid_bias_grad. See the documentation for the Params class for a description of what
-        these matrices represent."""
+         """
         
         # The matrix with values dC / dz_j, where dz_j is the input to the jth hidden unit,
         # i.e. y_j = 1 / (1 + e^{-z_j})
